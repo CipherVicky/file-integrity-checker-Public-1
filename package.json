@@ -1,0 +1,46 @@
+{
+  "name": "file-integrity-checker",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "integrity-check": "./cli/bin/integrity-check.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "cybersecurity",
+    "sha256",
+    "file-integrity",
+    "hash-verification",
+    "cryptography",
+    "baseline-monitoring"
+  ],
+  "author": "CipherVicky",
+  "license": "MIT",
+  "description": "File Integrity Checker – SHA-256 cryptographic verification and baseline monitoring suite",
+  "dependencies": {
+    "@noble/hashes": "^1.8.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.49.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.5.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^6.4.3",
+    "vitest": "^4.1.11"
+  }
+}
