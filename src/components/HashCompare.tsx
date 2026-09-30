@@ -7,8 +7,7 @@ import {
   Copy, 
   Check, 
   RotateCcw,
-  Sparkles,
-  AlertCircle
+  Sparkles
 } from 'lucide-react';
 import { compareHashes, formatBytes, hashFileProgressive, normalizeHash } from '../utils/crypto';
 
@@ -83,10 +82,10 @@ export const HashCompare: React.FC = () => {
       <div className="border-b border-slate-800 pb-4">
         <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
           <GitCompare className="w-5 h-5 text-blue-400" />
-          CRYPTOGRAPHIC HASH COMPARISON
+          COMPARE TWO HASHES
         </h2>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Safely compare two SHA-256 checksums case-insensitively with automatic sanitization (removes spaces, dashes, colons) and character-by-character discrepancy visualization.
+          Paste two SHA-256 codes side-by-side to check if they match. Spaces, dashes, and capital letters are automatically fixed for you.
         </p>
       </div>
 
@@ -94,25 +93,25 @@ export const HashCompare: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono">
         <span className="text-slate-400 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-          Test Presets:
+          Try A Test Example:
         </span>
         <div className="flex items-center gap-2">
           <button
             onClick={() => loadSample('match')}
             className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 transition-colors"
           >
-            Load Sample Match (Ubuntu 24.04)
+            Load Matching Hashes
           </button>
           <button
             onClick={() => loadSample('mismatch')}
             className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-red-300 border border-red-500/30 transition-colors"
           >
-            Load 1-Hex Discrepancy
+            Load 1-Letter Difference
           </button>
           <button
             onClick={reset}
             className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
-            title="Reset form"
+            title="Clear fields"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -126,7 +125,7 @@ export const HashCompare: React.FC = () => {
           <div className="flex items-center justify-between">
             <label className="text-xs font-mono uppercase text-slate-300 font-semibold flex items-center gap-2">
               <span>Calculated SHA-256</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">Your File / Test Hash</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">Your File</span>
             </label>
             <div className="flex items-center gap-2">
               <label className="cursor-pointer text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1">
@@ -158,7 +157,7 @@ export const HashCompare: React.FC = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="e.g. 3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e"
+              placeholder="Paste your hash here (or upload a file above)..."
               value={calculatedInput}
               onChange={(e) => setCalculatedInput(e.target.value)}
               className="w-full bg-slate-950 font-mono text-xs sm:text-sm text-cyan-300 p-3.5 rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-400 tracking-wider placeholder:text-slate-600"
@@ -169,9 +168,9 @@ export const HashCompare: React.FC = () => {
           )}
           {calculatedInput && (
             <div className="flex justify-between text-[11px] font-mono text-slate-500">
-              <span>Length: {normalizeHash(calculatedInput).length} chars</span>
+              <span>Length: {normalizeHash(calculatedInput).length} characters</span>
               <span>
-                {normalizeHash(calculatedInput).length === 64 ? '✓ Valid 64-char Hex' : '⚠️ Expecting 64 characters'}
+                {normalizeHash(calculatedInput).length === 64 ? '✓ Valid 64-char Hash' : '⚠️ Must be 64 characters'}
               </span>
             </div>
           )}
@@ -182,7 +181,7 @@ export const HashCompare: React.FC = () => {
           <div className="flex items-center justify-between">
             <label className="text-xs font-mono uppercase text-slate-300 font-semibold flex items-center gap-2">
               <span>Expected SHA-256</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">Vendor / Release Webpage</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">From Official Website</span>
             </label>
             {expectedInput && (
               <button
@@ -200,7 +199,7 @@ export const HashCompare: React.FC = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Paste official checksum from vendor website..."
+              placeholder="Paste the hash from the developer's website..."
               value={expectedInput}
               onChange={(e) => setExpectedInput(e.target.value)}
               className="w-full bg-slate-950 font-mono text-xs sm:text-sm text-emerald-300 p-3.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-400 tracking-wider placeholder:text-slate-600"
@@ -208,9 +207,9 @@ export const HashCompare: React.FC = () => {
           </div>
           {expectedInput && (
             <div className="flex justify-between text-[11px] font-mono text-slate-500">
-              <span>Length: {normalizeHash(expectedInput).length} chars</span>
+              <span>Length: {normalizeHash(expectedInput).length} characters</span>
               <span>
-                {normalizeHash(expectedInput).length === 64 ? '✓ Valid 64-char Hex' : '⚠️ Expecting 64 characters'}
+                {normalizeHash(expectedInput).length === 64 ? '✓ Valid 64-char Hash' : '⚠️ Must be 64 characters'}
               </span>
             </div>
           )}
@@ -242,8 +241,7 @@ export const HashCompare: React.FC = () => {
                 MATCH
               </h3>
               <p className="text-xs sm:text-sm text-emerald-200">
-                Both SHA-256 fingerprints are cryptographically identical (100% 256-bit match).
-                The file has not been altered, damaged, or modified.
+                Both hashes are 100% identical! The file is genuine, complete, and unmodified.
               </p>
             </div>
           ) : (
@@ -255,7 +253,7 @@ export const HashCompare: React.FC = () => {
                 MISMATCH
               </h3>
               <p className="text-xs sm:text-sm text-red-200">
-                The calculated hash does NOT match the expected value. The file may be corrupt, a different version, or modified.
+                The hashes are different! The file might be corrupted, a different version, or modified.
               </p>
             </div>
           )}
@@ -263,7 +261,7 @@ export const HashCompare: React.FC = () => {
           {/* Hex Discrepancy Diff View */}
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 font-mono text-xs">
             <h4 className="text-xs uppercase tracking-wider text-slate-400 font-bold flex items-center justify-between">
-              <span>Detailed Character Discrepancy Map</span>
+              <span>See Exactly Which Letters Differ</span>
               <span className="text-[11px] text-slate-500">
                 Differences: {comparisonResult.diffIndices.length} / 64 characters
               </span>
@@ -271,7 +269,7 @@ export const HashCompare: React.FC = () => {
 
             {/* Calculated Breakdown */}
             <div className="space-y-1">
-              <div className="text-[11px] text-slate-400">Calculated:</div>
+              <div className="text-[11px] text-slate-400">Your File:</div>
               <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex flex-wrap gap-x-1 gap-y-1 break-all">
                 {comparisonResult.normalizedA.split('').map((char, idx) => {
                   const isDiff = comparisonResult.diffIndices.includes(idx);
@@ -283,7 +281,7 @@ export const HashCompare: React.FC = () => {
                           ? 'bg-red-500 text-white font-extrabold animate-pulse'
                           : 'text-cyan-300'
                       }`}
-                      title={isDiff ? `Mismatch at hex index ${idx}` : undefined}
+                      title={isDiff ? `Letter differs at position ${idx + 1}` : undefined}
                     >
                       {char}
                     </span>
@@ -306,7 +304,7 @@ export const HashCompare: React.FC = () => {
                           ? 'bg-emerald-500 text-slate-950 font-extrabold'
                           : 'text-emerald-300'
                       }`}
-                      title={isDiff ? `Expected char at hex index ${idx}` : undefined}
+                      title={isDiff ? `Expected letter at position ${idx + 1}` : undefined}
                     >
                       {char}
                     </span>

@@ -44,7 +44,6 @@ export const SoftwareVerifier: React.FC = () => {
       let potentialMismatch: TrustedRecord | undefined;
 
       if (selectedPresetId !== 'auto') {
-        // User specifically picked a package to verify against
         const target = allRecords.find(r => r.id === selectedPresetId);
         if (target) {
           if (target.sha256.toLowerCase() === hash.toLowerCase()) {
@@ -54,7 +53,6 @@ export const SoftwareVerifier: React.FC = () => {
           }
         }
       } else {
-        // Auto-detect against full database
         matched = lookupHashInDatabase(hash);
         if (!matched) {
           potentialMismatch = findPotentialMismatch(file.name, hash);
@@ -112,10 +110,10 @@ export const SoftwareVerifier: React.FC = () => {
       <div className="border-b border-slate-800 pb-4">
         <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-          TRUSTED APPLICATION & INSTALLER VERIFICATION
+          VERIFY DOWNLOADED SOFTWARE
         </h2>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Cryptographically verify software packages and operating system ISOs against official vendor release signatures.
+          Check if an app or operating system you downloaded is genuine and matches the official version released by its developer.
         </p>
       </div>
 
@@ -123,7 +121,7 @@ export const SoftwareVerifier: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-900 border border-slate-800">
         <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
           <Sparkles className="w-4 h-4 text-cyan-400" />
-          <span>Verification Mode:</span>
+          <span>App to check against:</span>
         </div>
         <div className="flex-1 max-w-md">
           <select
@@ -131,7 +129,7 @@ export const SoftwareVerifier: React.FC = () => {
             onChange={(e) => setSelectedPresetId(e.target.value)}
             className="w-full text-xs font-mono bg-slate-950 text-slate-200 border border-slate-700 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500"
           >
-            <option value="auto">⚡ Automatic Detection (Search All {allRecords.length} Trusted Records)</option>
+            <option value="auto">⚡ Automatic (Check against all {allRecords.length} known apps)</option>
             <optgroup label="Operating Systems">
               {allRecords.filter(r => r.category === 'Operating Systems').map(r => (
                 <option key={r.id} value={r.id}>
@@ -196,10 +194,10 @@ export const SoftwareVerifier: React.FC = () => {
           </div>
           <div>
             <h3 className="text-base font-semibold text-slate-100">
-              Upload Installer / Binary or <span className="text-emerald-400 underline decoration-emerald-400/40">Browse Files</span>
+              Drop installer here or <span className="text-emerald-400 underline decoration-emerald-400/40">Browse Files</span>
             </h3>
             <p className="text-xs text-slate-400 mt-1">
-              Ubuntu, Debian, Firefox, VS Code, Git, Python, Wireshark, 7-Zip, VLC, and custom entries.
+              Supports Ubuntu, Debian, Firefox, VS Code, Git, Python, Wireshark, 7-Zip, VLC, and more.
             </p>
           </div>
         </div>
@@ -209,7 +207,7 @@ export const SoftwareVerifier: React.FC = () => {
       {isHashing && (
         <div className="p-5 rounded-xl bg-slate-900 border border-emerald-500/30">
           <div className="flex justify-between text-xs font-mono mb-2">
-            <span className="text-emerald-400">Verifying SHA-256 for: {currentFile?.name}</span>
+            <span className="text-emerald-400">Checking: {currentFile?.name}</span>
             <span className="text-slate-300">{progress}%</span>
           </div>
           <div className="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden">
@@ -239,7 +237,7 @@ export const SoftwareVerifier: React.FC = () => {
                     <span className="text-xl">🟢</span>
                   </div>
                   <p className="text-xs sm:text-sm text-emerald-200/90 mt-1">
-                    This file's SHA-256 hash exactly matches a trusted reference published by the official software vendor.
+                    This file's SHA-256 code exactly matches the original version published by the official software maker.
                   </p>
                 </div>
               </div>
@@ -255,15 +253,15 @@ export const SoftwareVerifier: React.FC = () => {
                   <span className="text-white font-bold">{scanResult.matchedRecord.version}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Vendor / Developer</span>
+                  <span className="text-slate-400 block text-[11px]">Maker / Developer</span>
                   <span className="text-white font-bold">{scanResult.matchedRecord.vendor}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Target Platform</span>
+                  <span className="text-slate-400 block text-[11px]">For Platform</span>
                   <span className="text-slate-200">{scanResult.matchedRecord.platform} ({scanResult.matchedRecord.architecture})</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Authoritative Source</span>
+                  <span className="text-slate-400 block text-[11px]">Official Source</span>
                   <a
                     href={scanResult.matchedRecord.source_url}
                     target="_blank"
@@ -298,27 +296,27 @@ export const SoftwareVerifier: React.FC = () => {
                   </div>
                   <p className="text-xs sm:text-sm text-red-200/90 mt-1">
                     A trusted reference exists for this software, but the calculated SHA-256 value is different.
-                    This may indicate a different version, modified file, corruption, or unauthorized replacement.
+                    This may indicate a different version, modified file, corruption, or replacement.
                   </p>
                 </div>
               </div>
 
-              {/* Discrepancy Comparison Box */}
+              {/* Discrepancy Box */}
               <div className="p-4 rounded-xl bg-slate-950/90 border border-red-500/30 space-y-3 font-mono text-xs">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Target Software Record:</span>
+                  <span className="text-slate-400 block text-[11px]">Known App:</span>
                   <span className="text-white font-bold">
                     {scanResult.potentialMismatchRecord.software} v{scanResult.potentialMismatchRecord.version} ({scanResult.potentialMismatchRecord.file_name})
                   </span>
                 </div>
                 <div>
-                  <span className="text-emerald-400 block text-[11px] font-bold">Expected SHA-256 (Vendor Official):</span>
+                  <span className="text-emerald-400 block text-[11px] font-bold">Expected Hash (Official):</span>
                   <code className="text-emerald-300 break-all select-all block bg-slate-900 p-2 rounded border border-emerald-500/30">
                     {scanResult.potentialMismatchRecord.sha256}
                   </code>
                 </div>
                 <div>
-                  <span className="text-red-400 block text-[11px] font-bold">Calculated SHA-256 (Your File):</span>
+                  <span className="text-red-400 block text-[11px] font-bold">Your File Hash:</span>
                   <code className="text-red-300 break-all select-all block bg-slate-900 p-2 rounded border border-red-500/30">
                     {scanResult.sha256}
                   </code>
@@ -358,7 +356,7 @@ export const SoftwareVerifier: React.FC = () => {
                   <strong>This does NOT automatically mean the file is malicious.</strong>
                 </p>
                 <p className="text-slate-400 leading-relaxed">
-                  SHA-256 cryptographic verification verifies file identity and proof of origin against pre-indexed lists. It does not perform antivirus behavioral analysis or determine whether arbitrary unindexed software is inherently safe or harmful. If you know the vendor's official checksum, use the <strong>Compare Hashes</strong> tab or add it to your <strong>Custom Database</strong>.
+                  SHA-256 simply checks if a file matches a known original copy. It does not scan for viruses or check whether an unknown file is harmful. Personal files, home projects, or less common apps are simply not in public lists. If you have the expected code, you can use the <strong>Compare Hashes</strong> tab!
                 </p>
               </div>
             </div>
@@ -367,7 +365,7 @@ export const SoftwareVerifier: React.FC = () => {
           {/* File Summary Card */}
           <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Scanned File Details</span>
+              <span className="text-slate-400">Scanned File Summary</span>
               <button
                 onClick={() => copyHash(scanResult.sha256)}
                 className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
@@ -379,10 +377,10 @@ export const SoftwareVerifier: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-slate-300">
               <div><span className="text-slate-500">Name:</span> {scanResult.fileName}</div>
               <div><span className="text-slate-500">Size:</span> {formatBytes(scanResult.fileSize)}</div>
-              <div><span className="text-slate-500">Duration:</span> {scanResult.computedTimeMs}ms</div>
+              <div><span className="text-slate-500">Time:</span> {scanResult.computedTimeMs}ms</div>
             </div>
             <div className="pt-2 border-t border-slate-800">
-              <span className="text-slate-500 block mb-1">Computed Hash:</span>
+              <span className="text-slate-500 block mb-1">Calculated SHA-256:</span>
               <code className="text-cyan-300 break-all select-all font-semibold block bg-slate-950 p-2 rounded border border-slate-800">
                 {scanResult.sha256}
               </code>

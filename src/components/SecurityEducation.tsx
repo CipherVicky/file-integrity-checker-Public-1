@@ -29,10 +29,10 @@ export const SecurityEducation: React.FC = () => {
       <div className="border-b border-slate-800 pb-4">
         <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
           <GraduationCap className="w-5 h-5 text-teal-400" />
-          CRYPTOGRAPHIC SECURITY & THREAT MODEL HUB
+          BEGINNER CYBERSECURITY GUIDE
         </h2>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Essential cybersecurity principles, cryptographic guarantees, and guidance on distinguishing integrity from malware analysis.
+          Simple explanations of how hashes work, why they protect your computer, and what each check result means.
         </p>
       </div>
 
@@ -44,23 +44,44 @@ export const SecurityEducation: React.FC = () => {
           </div>
           <div>
             <h3 className="text-base font-bold font-mono text-amber-300">
-              FUNDAMENTAL PRINCIPLE: UNKNOWN FILE ≠ MALICIOUS FILE
+              GOLDEN RULE: UNKNOWN FILE ≠ VIRUS OR DANGER
             </h3>
             <p className="text-xs text-amber-200/90 mt-0.5">
-              SHA-256 verifies <strong>Identity and Untampered Transmission</strong>, not whether executable software is inherently benign.
+              SHA-256 checks if a file is an <strong>exact twin</strong> of a known original. It is not an antivirus scanner.
             </p>
           </div>
         </div>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          A cryptographic hash is an irreversible mathematical digest. While it guarantees that a file has not diverged by even 1 single bit from the author's copy, it cannot detect zero-day exploits, logical vulnerabilities, or backdoors intentionally inserted by the author. Conversely, private scripts, internal corporate tools, or newly published builds will not appear in public databases, but are entirely benign.
+          When you see "Unknown File", it simply means the file is not in our database of famous apps. Your personal photos, homework documents, and custom scripts are not in any public database, but they are completely safe. Always remember: SHA-256 checks <em>identity</em>, not whether a file contains malware.
         </p>
+      </div>
+
+      {/* What is a Hash? */}
+      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+        <h3 className="text-base font-bold text-white font-mono flex items-center gap-2">
+          <Cpu className="w-4 h-4 text-cyan-400" />
+          WHAT IS A HASH? (THE DIGITAL FINGERPRINT)
+        </h3>
+        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          Imagine taking any file—a 10 GB movie or a 1-sentence text note—and running it through a digital machine that creates a unique 64-character code. That code is called a <strong>SHA-256 hash</strong>.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+            <span className="text-cyan-400 font-bold block mb-1">1. It is One-Way</span>
+            <span className="text-slate-400">You can easily turn a file into a hash, but nobody in the world can turn a hash back into the file.</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+            <span className="text-emerald-400 font-bold block mb-1">2. It Catches Any Change</span>
+            <span className="text-slate-400">If you change even a single dot, comma, or letter in the file, the hash changes completely.</span>
+          </div>
+        </div>
       </div>
 
       {/* The 4 Distinct Security States */}
       <div className="space-y-4">
         <h3 className="text-base font-bold text-white font-mono flex items-center gap-2">
           <Lock className="w-4 h-4 text-cyan-400" />
-          THE FOUR INTEGRITY CLASSIFICATIONS
+          WHAT THE 4 CHECK RESULTS MEAN
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -70,7 +91,7 @@ export const SecurityEducation: React.FC = () => {
               <span>1. VERIFIED</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              The file's computed SHA-256 digest is an exact, bit-for-bit match against an authoritative vendor checksum published on their official security portal. Proves the file was received exactly as created by the legitimate developer.
+              The file is an exact, bit-for-bit twin of the official copy released by the original software developer. You can be 100% confident it hasn't been modified.
             </p>
           </div>
 
@@ -80,7 +101,7 @@ export const SecurityEducation: React.FC = () => {
               <span>2. HASH MISMATCH</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              A trusted record exists for this specific software, but the calculated hash is different. This signals a warning: it could be a different release version, storage bit rot, an interrupted download, or deliberate Trojan insertion by a compromised CDN mirror.
+              We know what the file is supposed to be, but its code doesn't match! This means the file was changed, corrupted during download, or is an unverified version.
             </p>
           </div>
 
@@ -90,48 +111,48 @@ export const SecurityEducation: React.FC = () => {
               <span>3. UNKNOWN FILE</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              No matching reference exists in the trusted database. The system treats this with neutral skepticism. The user should verify against the developer's release notes or import the expected checksum manually.
+              This file is not in our list of popular software. It could be your own document or a private file. It is NOT necessarily dangerous.
             </p>
           </div>
 
           <div className="p-5 rounded-xl bg-slate-900 border border-purple-500/40 space-y-2">
             <div className="flex items-center gap-2 text-purple-400 font-bold font-mono text-sm">
               <span className="text-base">🟣</span>
-              <span>4. INTEGRITY VERIFIED (BASELINE)</span>
+              <span>4. FOLDER SNAPSHOT MATCH</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              The file matches a previously recorded, user-generated baseline manifest. Ideal for monitoring server configuration files (<code className="text-purple-300">/etc/nginx</code>, SSL certificates) against unauthorized file drift or ransomware modification.
+              The file matches a snapshot you previously saved on your computer. Great for keeping tabs on important folders and detecting accidental edits.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Threat Models */}
+      {/* Real-World Use Cases */}
       <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
         <h3 className="text-base font-bold text-white font-mono flex items-center gap-2">
-          <Cpu className="w-4 h-4 text-cyan-400" />
-          WHAT ATTACKS DOES SHA-256 PREVENT?
+          <ShieldCheck className="w-4 h-4 text-cyan-400" />
+          WHAT DOES THIS PROTECT YOU FROM?
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-            <h4 className="font-bold text-white font-mono text-sm">CDN / Mirror Tampering</h4>
+            <h4 className="font-bold text-white font-mono text-sm">Fake Downloads & Scams</h4>
             <p className="text-slate-400 leading-relaxed">
-              Open source software is frequently downloaded from third-party mirrors. If a mirror is breached and replaces an ISO with malware, comparing the SHA-256 with the main vendor portal immediately detects the tampering.
+              Shady download websites sometimes bundle adware or malware into free software. Checking the hash against the developer's official site prevents you from opening fakes.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-            <h4 className="font-bold text-white font-mono text-sm">Hardware & Network Corruption</h4>
+            <h4 className="font-bold text-white font-mono text-sm">Broken or Incomplete Files</h4>
             <p className="text-slate-400 leading-relaxed">
-              During transmission over unstable Wi-Fi or storage on degrading SSDs, packets can drop or flip bits. SHA-256 ensures zero data corruption occurred during download.
+              Large games or operating system ISOs can get corrupted if Wi-Fi cuts out during download. Hashing verifies every single byte arrived intact.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-            <h4 className="font-bold text-white font-mono text-sm">Ransomware & Silent Drift</h4>
+            <h4 className="font-bold text-white font-mono text-sm">Sneaky Unwanted Changes</h4>
             <p className="text-slate-400 leading-relaxed">
-              By taking periodic cryptographic baselines of critical folders, administrators immediately detect if an adversary modified system binaries or web application source code.
+              If someone (or a background program) edits files on your computer without your permission, taking folder snapshots will spot the changes immediately.
             </p>
           </div>
         </div>
@@ -143,15 +164,15 @@ export const SecurityEducation: React.FC = () => {
           <div className="flex items-center gap-2">
             <Terminal className="w-5 h-5 text-cyan-400" />
             <h3 className="text-base font-bold text-white font-mono">
-              COMPANION CLI UTILITY: <code className="text-cyan-400">integrity-check</code>
+              COMMAND LINE TOOL: <code className="text-cyan-400">integrity-check</code>
             </h3>
           </div>
           <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">
-            Node.js CLI
+            For Terminal Users
           </span>
         </div>
         <p className="text-xs text-slate-300 leading-relaxed">
-          For automated CI/CD pipelines, DevOps servers, and headless terminals, this repository includes an official CLI tool.
+          If you like working in the terminal or want to automate file checks in scripts, you can run these simple commands:
         </p>
 
         <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 space-y-3 font-mono text-xs">
@@ -168,24 +189,24 @@ export const SecurityEducation: React.FC = () => {
 
           <div className="space-y-2 text-slate-300">
             <div>
-              <span className="text-slate-500"># 1. Verify a file against the trusted database</span>
+              <span className="text-slate-500"># 1. Check an installer against known apps</span>
               <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js verify ubuntu-24.04-desktop-amd64.iso</pre>
             </div>
             <div>
-              <span className="text-slate-500"># 2. Hash any file directly in terminal</span>
-              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js hash ./dist/app.tar.gz</pre>
+              <span className="text-slate-500"># 2. Get the hash of any file</span>
+              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js hash ./my-file.zip</pre>
             </div>
             <div>
               <span className="text-slate-500"># 3. Compare two hashes directly</span>
               <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js compare &lt;hash1&gt; &lt;hash2&gt;</pre>
             </div>
             <div>
-              <span className="text-slate-500"># 4. Create directory baseline snapshot</span>
-              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js baseline create ./src --out baseline.json</pre>
+              <span className="text-slate-500"># 4. Save a folder snapshot</span>
+              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js baseline create ./my-folder --out snapshot.json</pre>
             </div>
             <div>
-              <span className="text-slate-500"># 5. Audit directory drift against baseline</span>
-              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js baseline audit ./src --baseline baseline.json</pre>
+              <span className="text-slate-500"># 5. Check what changed in the folder</span>
+              <pre className="text-cyan-300 mt-0.5">$ node cli/bin/integrity-check.js baseline audit ./my-folder --baseline snapshot.json</pre>
             </div>
           </div>
         </div>

@@ -42,15 +42,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isCloudActive = isSupabaseConfigured();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: ShieldCheck },
-    { id: 'hasher', label: 'File Hasher', icon: FileSearch },
-    { id: 'verifier', label: 'Software Verifier', icon: CheckCircle2 },
+    { id: 'dashboard', label: 'Home', icon: ShieldCheck },
+    { id: 'hasher', label: 'Check File', icon: FileSearch },
+    { id: 'verifier', label: 'Verify Software', icon: CheckCircle2 },
     { id: 'compare', label: 'Compare Hashes', icon: GitCompare },
-    { id: 'baseline', label: 'Baseline Monitor', icon: FolderSync },
-    { id: 'avalanche', label: 'Avalanche Lab', icon: Activity },
-    { id: 'database', label: `Database (${trustedCount})`, icon: Database },
-    { id: 'history', label: 'Audit History', icon: History },
-    { id: 'education', label: 'Security Hub', icon: GraduationCap },
+    { id: 'baseline', label: 'Folder Changes', icon: FolderSync },
+    { id: 'avalanche', label: 'Hash Lab', icon: Activity },
+    { id: 'database', label: `Known Apps (${trustedCount})`, icon: Database },
+    { id: 'history', label: 'History', icon: History },
+    { id: 'education', label: 'Learn Basics', icon: GraduationCap },
   ];
 
   return (
@@ -60,23 +60,22 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-400/40 shadow-inner shadow-cyan-500/30">
-              <ShieldCheck className="w-6 h-6 text-cyan-400 animate-pulse" />
-              <div className="absolute inset-0 rounded-lg border border-cyan-400/20 filter blur-xs pointer-events-none" />
+              <ShieldCheck className="w-6 h-6 text-cyan-400" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-bold tracking-wider text-slate-100 uppercase font-mono">
+                <h1 className="text-base sm:text-lg font-bold tracking-wider text-slate-100 uppercase font-mono">
                   FILE INTEGRITY CHECKER
                 </h1>
                 <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                   SHA-256
                 </span>
-                <span className="hidden md:inline-flex px-1.5 py-0.5 text-[10px] font-mono tracking-widest uppercase rounded bg-slate-800 text-slate-400 border border-slate-700">
-                  NIST FIPS 180-4
+                <span className="hidden sm:inline-flex px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-400 border border-slate-700">
+                  Beginner Friendly
                 </span>
               </div>
               <p className="text-xs text-slate-400 hidden sm:block">
-                Verify files using SHA-256 cryptographic fingerprints.
+                Check if files were changed, corrupted, or modified using simple SHA-256 codes.
               </p>
             </div>
           </div>
@@ -86,15 +85,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Supabase Cloud Sync button */}
             <button
               onClick={onOpenSupabaseModal}
-              title={isCloudActive ? 'Supabase connected & synchronizing' : 'Connect Supabase for cloud persistence'}
+              title={isCloudActive ? 'Cloud database connected' : 'Connect cloud database (Optional)'}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border transition-all duration-200 ${
                 isCloudActive
-                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/40 shadow-sm shadow-emerald-950'
+                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/40'
                   : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-cyan-500/40 hover:text-slate-200'
               }`}
             >
               <Cloud className={`w-3.5 h-3.5 ${isCloudActive ? 'text-emerald-400' : 'text-slate-400'}`} />
-              <span className="hidden sm:inline">Supabase</span>
+              <span className="hidden sm:inline">Cloud Sync</span>
               <span className={`w-1.5 h-1.5 rounded-full ${isCloudActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
             </button>
 

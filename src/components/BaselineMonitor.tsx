@@ -8,7 +8,7 @@ import {
   AlertTriangle, 
   PlusCircle, 
   MinusCircle, 
-  Sparkles,
+  Sparkles, 
   FileCheck,
   FolderOpen,
   ArrowRight
@@ -26,7 +26,7 @@ export const BaselineMonitor: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<'create' | 'audit'>('create');
 
   // Creation State
-  const [baselineName, setBaselineName] = useState('Production-Baseline-v1');
+  const [baselineName, setBaselineName] = useState('My-Folder-Snapshot-v1');
   const [createdManifest, setCreatedManifest] = useState<BaselineManifest | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [createProgress, setCreateProgress] = useState({ current: 0, total: 0, file: '' });
@@ -51,7 +51,7 @@ export const BaselineMonitor: React.FC = () => {
       });
       setCreatedManifest(manifest);
     } catch (err) {
-      console.error('Failed to create baseline manifest:', err);
+      console.error('Failed to create baseline snapshot:', err);
     } finally {
       setIsCreating(false);
     }
@@ -70,10 +70,10 @@ export const BaselineMonitor: React.FC = () => {
           setBaselineToAudit(parsed);
           setAuditReport(null);
         } else {
-          alert('Invalid baseline format. JSON must contain a "files" array.');
+          alert('Invalid snapshot file. Please upload a valid baseline JSON file.');
         }
       } catch (err) {
-        alert('Failed to parse baseline JSON file.');
+        alert('Could not read the snapshot file.');
       }
     };
     reader.readAsText(file);
@@ -92,7 +92,7 @@ export const BaselineMonitor: React.FC = () => {
       });
       setAuditReport(report);
     } catch (err) {
-      console.error('Error running baseline audit:', err);
+      console.error('Error checking folder changes:', err);
     } finally {
       setIsAuditing(false);
     }
@@ -102,30 +102,30 @@ export const BaselineMonitor: React.FC = () => {
   const loadDemoBaseline = () => {
     const sampleManifest: BaselineManifest = {
       version: '1.0.0',
-      name: 'System-Kernel-Config-Baseline',
+      name: 'Sample-Project-Snapshot',
       createdAt: new Date().toISOString(),
-      generator: 'File Integrity Checker Demo Engine',
+      generator: 'File Integrity Checker Engine',
       files: [
         {
-          path: 'config/nginx.conf',
+          path: 'config/settings.json',
           size: 1450,
           sha256: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
           lastModified: Date.now() - 3600000
         },
         {
-          path: 'certs/server.crt',
+          path: 'certs/security.key',
           size: 2048,
           sha256: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
           lastModified: Date.now() - 7200000
         },
         {
-          path: 'bin/auth-service',
+          path: 'src/main.js',
           size: 512000,
           sha256: '4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a',
           lastModified: Date.now() - 10800000
         },
         {
-          path: 'logs/audit.log',
+          path: 'notes/readme.txt',
           size: 4096,
           sha256: 'ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d',
           lastModified: Date.now() - 14400000
@@ -147,10 +147,10 @@ export const BaselineMonitor: React.FC = () => {
       <div className="border-b border-slate-800 pb-4">
         <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
           <FolderSync className="w-5 h-5 text-purple-400" />
-          BASELINE INTEGRITY & DRIFT MONITOR
+          TRACK FOLDER CHANGES (BASELINE MONITOR)
         </h2>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Take cryptographic snapshots of directories and configuration trees. Detect file tampering, unauthorized modifications, newly dropped binaries, and missing files.
+          Save a list of your files today, then check anytime later to see which files were modified, newly added, or deleted.
         </p>
       </div>
 
@@ -165,7 +165,7 @@ export const BaselineMonitor: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            1. Create Baseline Manifest
+            1. Save Folder Snapshot
           </button>
           <button
             onClick={() => setActiveSubTab('audit')}
@@ -175,7 +175,7 @@ export const BaselineMonitor: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            2. Audit & Detect Drift
+            2. Check What Changed
           </button>
         </div>
 
@@ -184,7 +184,7 @@ export const BaselineMonitor: React.FC = () => {
           className="text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 flex items-center gap-1.5"
         >
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="hidden sm:inline">Load Sample Baseline</span>
+          <span className="hidden sm:inline">Try A Demo Snapshot</span>
         </button>
       </div>
 
@@ -194,13 +194,13 @@ export const BaselineMonitor: React.FC = () => {
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <div>
               <label className="text-xs font-mono uppercase text-slate-300 font-semibold block mb-1">
-                Baseline Name
+                Give This Snapshot A Name
               </label>
               <input
                 type="text"
                 value={baselineName}
                 onChange={(e) => setBaselineName(e.target.value)}
-                placeholder="e.g. Production-Release-1.0-Manifest"
+                placeholder="e.g. My-Project-Version-1"
                 className="w-full bg-slate-950 font-mono text-xs sm:text-sm text-purple-300 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-purple-400"
               />
             </div>
@@ -210,7 +210,7 @@ export const BaselineMonitor: React.FC = () => {
               <label className="flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed border-slate-700 hover:border-purple-500/50 hover:bg-purple-950/10 cursor-pointer transition-all">
                 <FolderOpen className="w-8 h-8 text-purple-400 mb-2" />
                 <span className="text-xs font-mono font-bold text-slate-200">Select Entire Folder</span>
-                <span className="text-[11px] text-slate-400 text-center mt-1">Preserves directory structure & relative paths</span>
+                <span className="text-[11px] text-slate-400 text-center mt-1">Saves all files and subfolders</span>
                 <input
                   type="file"
                   // @ts-ignore
@@ -225,7 +225,7 @@ export const BaselineMonitor: React.FC = () => {
               <label className="flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed border-slate-700 hover:border-purple-500/50 hover:bg-purple-950/10 cursor-pointer transition-all">
                 <FileCheck className="w-8 h-8 text-cyan-400 mb-2" />
                 <span className="text-xs font-mono font-bold text-slate-200">Select Multiple Files</span>
-                <span className="text-[11px] text-slate-400 text-center mt-1">Choose any set of files to snapshot</span>
+                <span className="text-[11px] text-slate-400 text-center mt-1">Pick specific files to record</span>
                 <input
                   type="file"
                   multiple
@@ -240,7 +240,7 @@ export const BaselineMonitor: React.FC = () => {
           {isCreating && (
             <div className="p-5 rounded-xl bg-slate-900 border border-purple-500/30 space-y-2">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-purple-300">Hashing: {createProgress.file}</span>
+                <span className="text-purple-300">Reading: {createProgress.file}</span>
                 <span className="text-slate-300">{createProgress.current} / {createProgress.total}</span>
               </div>
               <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -259,10 +259,10 @@ export const BaselineMonitor: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                    <h3 className="text-base font-bold font-mono text-white">Baseline Created Successfully</h3>
+                    <h3 className="text-base font-bold font-mono text-white">Snapshot Saved Successfully!</h3>
                   </div>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    {createdManifest.files.length} files cataloged with NIST-compliant SHA-256 digests.
+                    {createdManifest.files.length} files recorded with unique SHA-256 fingerprints.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -277,7 +277,7 @@ export const BaselineMonitor: React.FC = () => {
                     className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition-colors shadow"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Download Manifest (JSON)</span>
+                    <span>Download Snapshot (JSON)</span>
                   </button>
                   <button
                     onClick={() => {
@@ -286,7 +286,7 @@ export const BaselineMonitor: React.FC = () => {
                     }}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition-colors"
                   >
-                    <span>Proceed to Audit</span>
+                    <span>Check For Changes Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -299,7 +299,7 @@ export const BaselineMonitor: React.FC = () => {
                     <tr>
                       <th className="p-2.5">File Path</th>
                       <th className="p-2.5">Size</th>
-                      <th className="p-2.5">SHA-256 Cryptographic Hash</th>
+                      <th className="p-2.5">SHA-256 Fingerprint</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800 text-slate-300">
@@ -325,20 +325,20 @@ export const BaselineMonitor: React.FC = () => {
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <span className="text-xs font-mono uppercase text-slate-400 block">Loaded Baseline Reference</span>
+                <span className="text-xs font-mono uppercase text-slate-400 block">Loaded Snapshot</span>
                 {baselineToAudit ? (
                   <h3 className="text-base font-bold font-mono text-cyan-300">
-                    {baselineToAudit.name} ({baselineToAudit.files.length} indexed files)
+                    {baselineToAudit.name} ({baselineToAudit.files.length} saved files)
                   </h3>
                 ) : (
                   <p className="text-xs text-amber-400 font-mono mt-1">
-                    No baseline loaded yet. Upload a baseline JSON or create one first.
+                    No snapshot loaded yet. Upload your snapshot file or click "Try A Demo Snapshot".
                   </p>
                 )}
               </div>
               <label className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer transition-colors">
                 <UploadCloud className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Import Baseline JSON</span>
+                <span>Upload Snapshot JSON</span>
                 <input
                   type="file"
                   accept=".json"
@@ -353,12 +353,12 @@ export const BaselineMonitor: React.FC = () => {
           {baselineToAudit && (
             <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
               <span className="text-xs font-mono uppercase text-slate-300 font-semibold block">
-                Select Current Directory or Files to Verify Against Baseline
+                Select your current folder or files to check what changed:
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-slate-700 hover:border-cyan-500/50 hover:bg-slate-900 cursor-pointer transition-all">
                   <FolderOpen className="w-6 h-6 text-cyan-400 mb-1" />
-                  <span className="text-xs font-mono font-bold text-slate-200">Scan Current Folder</span>
+                  <span className="text-xs font-mono font-bold text-slate-200">Select Folder To Check</span>
                   <input
                     type="file"
                     // @ts-ignore
@@ -372,7 +372,7 @@ export const BaselineMonitor: React.FC = () => {
 
                 <label className="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-slate-700 hover:border-cyan-500/50 hover:bg-slate-900 cursor-pointer transition-all">
                   <FileCheck className="w-6 h-6 text-purple-400 mb-1" />
-                  <span className="text-xs font-mono font-bold text-slate-200">Scan Current Files</span>
+                  <span className="text-xs font-mono font-bold text-slate-200">Select Files To Check</span>
                   <input
                     type="file"
                     multiple
@@ -388,7 +388,7 @@ export const BaselineMonitor: React.FC = () => {
           {isAuditing && (
             <div className="p-5 rounded-xl bg-slate-900 border border-cyan-500/30 space-y-2">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-cyan-300">Auditing: {auditProgress.file}</span>
+                <span className="text-cyan-300">Checking: {auditProgress.file}</span>
                 <span className="text-slate-300">{auditProgress.current} / {auditProgress.total}</span>
               </div>
               <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -406,17 +406,17 @@ export const BaselineMonitor: React.FC = () => {
               {/* Summary Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
                 <div>
-                  <span className="text-xs font-mono uppercase text-slate-400">Drift Audit Summary</span>
+                  <span className="text-xs font-mono uppercase text-slate-400">Results</span>
                   <div className="flex items-center gap-2 mt-1">
                     {auditReport.modifiedCount === 0 && auditReport.deletedCount === 0 && auditReport.addedCount === 0 ? (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-mono text-xs font-bold">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                        INTEGRITY VERIFIED – 0 DRIFT DETECTED
+                        ALL FILES MATCH – 0 CHANGES DETECTED
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-300 font-mono text-xs font-bold">
                         <AlertTriangle className="w-4 h-4 text-red-400" />
-                        INTEGRITY DRIFT DETECTED – DISCREPANCIES FOUND
+                        CHANGES FOUND IN FOLDER
                       </span>
                     )}
                   </div>
@@ -426,21 +426,21 @@ export const BaselineMonitor: React.FC = () => {
                   <button
                     onClick={() => {
                       const md = generateMarkdownReport(auditReport);
-                      downloadFile(md, `integrity-audit-report-${Date.now()}.md`, 'text/markdown');
+                      downloadFile(md, `folder-change-report-${Date.now()}.md`, 'text/markdown');
                     }}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
                   >
                     <Download className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Export Markdown</span>
+                    <span>Download Report (.md)</span>
                   </button>
                   <button
                     onClick={() => {
-                      downloadFile(JSON.stringify(auditReport, null, 2), `integrity-audit-report-${Date.now()}.json`, 'application/json');
+                      downloadFile(JSON.stringify(auditReport, null, 2), `folder-change-report-${Date.now()}.json`, 'application/json');
                     }}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
                   >
                     <Download className="w-3.5 h-3.5 text-purple-400" />
-                    <span>Export JSON</span>
+                    <span>Download JSON</span>
                   </button>
                 </div>
               </div>
@@ -463,7 +463,7 @@ export const BaselineMonitor: React.FC = () => {
                     filterStatus === 'MODIFIED' ? 'bg-red-950/60 border-red-500' : 'bg-slate-950/70 border-slate-800 hover:border-red-500/40'
                   }`}
                 >
-                  <span className="text-[11px] font-mono uppercase text-slate-400 block">Modified (Tampered)</span>
+                  <span className="text-[11px] font-mono uppercase text-slate-400 block">Modified (Edited)</span>
                   <span className="text-xl font-bold font-mono text-red-400">{auditReport.modifiedCount}</span>
                 </button>
 
@@ -493,7 +493,7 @@ export const BaselineMonitor: React.FC = () => {
                 <span>Showing: <strong className="text-white">{filterStatus}</strong> ({filteredDiffs.length} items)</span>
                 {filterStatus !== 'ALL' && (
                   <button onClick={() => setFilterStatus('ALL')} className="text-cyan-400 hover:underline">
-                    Show All Files
+                    Show All
                   </button>
                 )}
               </div>
@@ -531,7 +531,7 @@ export const BaselineMonitor: React.FC = () => {
                     {diff.status === 'MODIFIED' && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
                         <div>
-                          <span className="text-slate-400">Baseline Hash:</span>
+                          <span className="text-slate-400">Previous Hash:</span>
                           <span className="block text-slate-300 truncate" title={diff.baselineHash}>
                             {diff.baselineHash}
                           </span>

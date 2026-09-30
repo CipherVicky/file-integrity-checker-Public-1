@@ -9,7 +9,7 @@ import {
   FileType, 
   Clock, 
   ShieldCheck, 
-  AlertTriangle,
+  AlertTriangle, 
   FileCode,
   Download
 } from 'lucide-react';
@@ -109,10 +109,10 @@ export const FileHasher: React.FC = () => {
       <div className="border-b border-slate-800 pb-4">
         <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
           <FileSearch className="w-5 h-5 text-cyan-400" />
-          GENERAL FILE INTEGRITY CHECKER
+          FILE HASH CHECKER
         </h2>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Upload any file to calculate its SHA-256 cryptographic digest locally. View full metadata, copy checksums, and export .sha256 verification files.
+          Select any file to calculate its unique 64-character SHA-256 fingerprint. You can copy the code or save a .sha256 file.
         </p>
       </div>
 
@@ -151,10 +151,10 @@ export const FileHasher: React.FC = () => {
               Drop a file here or <span className="text-cyan-400 underline decoration-cyan-400/40">Browse Files</span>
             </h3>
             <p className="text-xs text-slate-400 mt-1">
-              Supports files of any size (ISOs, executables, archives, raw documents).
+              Supports any file: documents, images, video, zip files, or installers.
             </p>
             <p className="text-[11px] text-cyan-400/80 font-mono mt-2">
-              🔒 100% Client-Side In-Memory Execution • The file never leaves your computer
+              🔒 100% Private • The file stays on your computer and is never sent to the internet
             </p>
           </div>
         </div>
@@ -165,7 +165,7 @@ export const FileHasher: React.FC = () => {
         <div className="p-5 rounded-xl bg-slate-900 border border-cyan-500/30 shadow-lg">
           <div className="flex items-center justify-between text-xs font-mono mb-2">
             <span className="text-cyan-300 font-bold truncate max-w-md">
-              Computing SHA-256 for: {currentFile.name}
+              Reading file: {currentFile.name}
             </span>
             <span className="text-slate-300">{progress}%</span>
           </div>
@@ -176,7 +176,7 @@ export const FileHasher: React.FC = () => {
             />
           </div>
           <div className="flex justify-between text-[11px] font-mono text-slate-400 mt-2">
-            <span>Processed: {formatBytes(bytesProcessed)}</span>
+            <span>Read: {formatBytes(bytesProcessed)}</span>
             <span>Total: {formatBytes(currentFile.size)}</span>
           </div>
         </div>
@@ -187,24 +187,24 @@ export const FileHasher: React.FC = () => {
         <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-6 space-y-6 shadow-2xl">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
             <div>
-              <span className="text-xs font-mono uppercase text-slate-400 block">Verification Status</span>
+              <span className="text-xs font-mono uppercase text-slate-400 block">Check Result</span>
               <div className="flex items-center gap-2 mt-1">
                 {result.status === 'VERIFIED' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-mono text-xs font-bold">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    VERIFIED – Exact Match With Trusted Reference
+                    VERIFIED – Hash matches the trusted original.
                   </span>
                 )}
                 {result.status === 'HASH_MISMATCH' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-300 font-mono text-xs font-bold">
                     <AlertTriangle className="w-4 h-4 text-red-400" />
-                    HASH MISMATCH – Discrepancy Found Against Known Catalog
+                    HASH MISMATCH – File differs from the trusted version.
                   </span>
                 )}
                 {result.status === 'UNKNOWN' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 font-mono text-xs font-bold">
                     <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    UNVERIFIED – No Matching Trusted Hash Found
+                    UNVERIFIED – No matching trusted hash found.
                   </span>
                 )}
               </div>
@@ -214,10 +214,10 @@ export const FileHasher: React.FC = () => {
               <button
                 onClick={downloadChecksumFile}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
-                title="Download standard sha256sum verification file"
+                title="Download checksum file"
               >
                 <Download className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Save .sha256</span>
+                <span>Save .sha256 File</span>
               </button>
             </div>
           </div>
@@ -253,7 +253,7 @@ export const FileHasher: React.FC = () => {
                 <span>File Type</span>
               </div>
               <p className="text-sm font-mono text-white font-semibold truncate" title={result.fileType}>
-                {result.fileType || 'binary/raw'}
+                {result.fileType || 'Generic file'}
               </p>
             </div>
 
@@ -266,7 +266,7 @@ export const FileHasher: React.FC = () => {
                 {formatTimestamp(result.lastModified)}
               </p>
               <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
-                <Clock className="w-3 h-3" /> Hashed in {result.computedTimeMs}ms
+                <Clock className="w-3 h-3" /> Checked in {result.computedTimeMs}ms
               </span>
             </div>
           </div>
@@ -276,10 +276,10 @@ export const FileHasher: React.FC = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono uppercase text-cyan-400 font-bold">
-                  SHA-256 Checksum
+                  SHA-256 Hash
                 </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
-                  64 Hex Characters • 256 Bits
+                  64 Letters & Numbers
                 </span>
               </div>
               <button
@@ -287,7 +287,7 @@ export const FileHasher: React.FC = () => {
                 className="flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied to Clipboard!' : 'Copy Hash'}</span>
+                <span>{copied ? 'Copied!' : 'Copy Hash'}</span>
               </button>
             </div>
             <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
@@ -297,13 +297,13 @@ export const FileHasher: React.FC = () => {
             </div>
           </div>
 
-          {/* Security Principle Note */}
+          {/* Simple Explanation Note */}
           <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-xs text-slate-400 space-y-1">
-            <span className="text-slate-300 font-bold uppercase tracking-wider block font-mono">
-              Cryptographic Integrity Guarantee:
+            <span className="text-slate-300 font-bold block font-mono">
+              💡 What does this code mean?
             </span>
             <p>
-              A SHA-256 hash acts as a unique digital fingerprint. If even a single bit in this file is modified, corrupted, or infected by malware, the resulting SHA-256 digest will change drastically (Avalanche Effect).
+              Think of this code as the file's digital fingerprint. If someone changes even a single letter in the file, or if the download gets damaged, the 64-character code will change completely.
             </p>
           </div>
         </div>

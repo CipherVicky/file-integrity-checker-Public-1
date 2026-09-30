@@ -42,7 +42,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
   const [newPlatform, setNewPlatform] = useState<Platform>('Multiplatform');
   const [newFileName, setNewFileName] = useState('');
   const [newSha256, setNewSha256] = useState('');
-  const [newSource, setNewSource] = useState('Official Vendor Website');
+  const [newSource, setNewSource] = useState('Official Website');
   const [newSourceUrl, setNewSourceUrl] = useState('');
   const [newNotes, setNewNotes] = useState('');
   const [formError, setFormError] = useState('');
@@ -59,7 +59,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this custom trusted record?')) {
+    if (confirm('Delete this custom saved record?')) {
       deleteCustomTrustedRecord(id);
       refreshList();
     }
@@ -76,13 +76,13 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
 
     const cleanHash = normalizeHash(newSha256);
     if (!isValidSha256(cleanHash)) {
-      setFormError('Invalid SHA-256 hash. Must be exactly 64 hexadecimal characters.');
+      setFormError('Invalid SHA-256 hash. Must be exactly 64 characters (letters a-f and numbers 0-9).');
       return;
     }
 
     const saved = saveCustomTrustedRecord({
       software: newSoftware.trim(),
-      vendor: newVendor.trim() || 'Custom / Internal',
+      vendor: newVendor.trim() || 'Custom',
       version: newVersion.trim() || '1.0.0',
       category: newCategory,
       platform: newPlatform,
@@ -131,7 +131,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `trusted-sha256-database-${new Date().toISOString().substring(0, 10)}.json`;
+    a.download = `known-apps-database-${new Date().toISOString().substring(0, 10)}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -145,10 +145,10 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
         <div>
           <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
             <Database className="w-5 h-5 text-emerald-400" />
-            OFFICIAL TRUSTED SHA-256 DATABASE
+            KNOWN SOFTWARE LIST
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Authoritative cryptographic repository of official operating systems, browsers, developer tools, and security utilities.
+            List of official checksums for popular operating systems, browsers, developer tools, and utilities.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -157,15 +157,15 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-colors shadow"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Custom Hash</span>
+            <span>Add Custom App</span>
           </button>
           <button
             onClick={exportDatabaseJson}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
-            title="Export complete database catalog as JSON"
+            title="Download list as JSON"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Export Catalog</span>
+            <span className="hidden sm:inline">Download List</span>
           </button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
           <input
             type="text"
-            placeholder="Search software, file name, or hash..."
+            placeholder="Search app name, file, or hash..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-slate-950 text-xs font-mono text-slate-200 pl-9 pr-3 py-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-cyan-400 placeholder:text-slate-600"
@@ -220,11 +220,11 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
           <table className="w-full text-left font-mono text-xs">
             <thead className="bg-slate-950 text-slate-400 border-b border-slate-800">
               <tr>
-                <th className="p-3.5">Software & Version</th>
+                <th className="p-3.5">Software Name</th>
                 <th className="p-3.5">Category</th>
-                <th className="p-3.5">Platform</th>
+                <th className="p-3.5">System</th>
                 <th className="p-3.5">File Name & Source</th>
-                <th className="p-3.5">SHA-256 Fingerprint</th>
+                <th className="p-3.5">Official SHA-256 Hash</th>
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
@@ -232,7 +232,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
               {filteredRecords.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-slate-500">
-                    No matching records found.
+                    No matching apps found.
                   </td>
                 </tr>
               ) : (
@@ -317,7 +317,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-base font-bold font-mono text-white flex items-center gap-2">
                 <Plus className="w-4 h-4 text-emerald-400" />
-                Add Custom Trusted Hash Record
+                Add Your Own App Hash
               </h3>
               <button
                 onClick={() => setShowAddModal(false)}
@@ -336,23 +336,23 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
             <form onSubmit={handleAddRecord} className="space-y-3 font-mono text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-400 block mb-1">Software Name *</label>
+                  <label className="text-slate-400 block mb-1">App Name *</label>
                   <input
                     type="text"
                     required
                     value={newSoftware}
                     onChange={(e) => setNewSoftware(e.target.value)}
-                    placeholder="e.g. Internal Tool"
+                    placeholder="e.g. My Program"
                     className="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-700 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Vendor / Team</label>
+                  <label className="text-slate-400 block mb-1">Developer / Maker</label>
                   <input
                     type="text"
                     value={newVendor}
                     onChange={(e) => setNewVendor(e.target.value)}
-                    placeholder="e.g. Org Dev"
+                    placeholder="e.g. Acme Corp"
                     className="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-700 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -388,45 +388,45 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-400 block mb-1">Platform</label>
+                  <label className="text-slate-400 block mb-1">Operating System</label>
                   <select
                     value={newPlatform}
                     onChange={(e) => setNewPlatform(e.target.value as Platform)}
                     className="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-700 text-white focus:outline-none focus:border-cyan-400"
                   >
-                    <option value="Multiplatform">Multiplatform</option>
+                    <option value="Multiplatform">Any Platform</option>
                     <option value="Windows">Windows</option>
                     <option value="Linux">Linux</option>
                     <option value="macOS">macOS</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Expected File Name *</label>
+                  <label className="text-slate-400 block mb-1">File Name *</label>
                   <input
                     type="text"
                     required
                     value={newFileName}
                     onChange={(e) => setNewFileName(e.target.value)}
-                    placeholder="e.g. app-1.0.0.tar.gz"
+                    placeholder="e.g. app-setup.exe"
                     className="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-700 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Official SHA-256 Hash (64 Hex Characters) *</label>
+                <label className="text-slate-400 block mb-1">SHA-256 Hash (64 characters) *</label>
                 <input
                   type="text"
                   required
                   value={newSha256}
                   onChange={(e) => setNewSha256(e.target.value)}
-                  placeholder="Paste 64-char SHA-256..."
+                  placeholder="Paste 64-char hash here..."
                   className="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-700 text-emerald-300 focus:outline-none focus:border-emerald-400 font-mono tracking-wider"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Source Reference URL</label>
+                <label className="text-slate-400 block mb-1">Website URL (Optional)</label>
                 <input
                   type="url"
                   value={newSourceUrl}
@@ -448,7 +448,7 @@ export const TrustedDatabaseView: React.FC<TrustedDatabaseViewProps> = ({ onData
                   type="submit"
                   className="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
                 >
-                  Save Record
+                  Save App
                 </button>
               </div>
             </form>

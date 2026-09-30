@@ -30,7 +30,7 @@ export const HashHistoryView: React.FC = () => {
   };
 
   const handleClearAll = () => {
-    if (confirm('Clear all audit scan history?')) {
+    if (confirm('Clear your check history?')) {
       clearHistory();
       setHistory([]);
     }
@@ -44,12 +44,12 @@ export const HashHistoryView: React.FC = () => {
 
   const handleExportCSV = () => {
     const csv = exportHistoryToCSV(history);
-    downloadFile(csv, `file-integrity-audit-${Date.now()}.csv`, 'text/csv');
+    downloadFile(csv, `file-check-history-${Date.now()}.csv`, 'text/csv');
   };
 
   const handleExportJSON = () => {
     const json = exportHistoryToJSON(history);
-    downloadFile(json, `file-integrity-audit-${Date.now()}.json`, 'application/json');
+    downloadFile(json, `file-check-history-${Date.now()}.json`, 'application/json');
   };
 
   return (
@@ -59,10 +59,10 @@ export const HashHistoryView: React.FC = () => {
         <div>
           <h2 className="text-xl font-bold text-white font-mono flex items-center gap-2">
             <History className="w-5 h-5 text-blue-400" />
-            LOCAL AUDIT & SCAN HISTORY
+            FILE CHECK HISTORY
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Persistent log of files hashed, verified, and checked during this and previous sessions.
+            List of files you have checked during this and previous sessions.
           </p>
         </div>
 
@@ -71,17 +71,17 @@ export const HashHistoryView: React.FC = () => {
             <button
               onClick={handleExportCSV}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
-              title="Export as CSV for compliance"
+              title="Download as Excel/CSV"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Export CSV</span>
+              <span>Download CSV</span>
             </button>
             <button
               onClick={handleExportJSON}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Export JSON</span>
+              <span>Download JSON</span>
             </button>
             <button
               onClick={handleClearAll}
@@ -99,19 +99,19 @@ export const HashHistoryView: React.FC = () => {
         {history.length === 0 ? (
           <div className="p-12 text-center text-slate-500 font-mono text-xs space-y-2">
             <Clock className="w-8 h-8 text-slate-600 mx-auto" />
-            <p>No audit history recorded yet.</p>
-            <p className="text-slate-600">Files hashed in the Hasher, Verifier, or Dashboard will automatically appear here.</p>
+            <p>No check history yet.</p>
+            <p className="text-slate-600">Files you check in the Hasher, Verifier, or Home tab will appear here.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left font-mono text-xs">
               <thead className="bg-slate-950 text-slate-400 border-b border-slate-800">
                 <tr>
-                  <th className="p-3.5">Timestamp</th>
+                  <th className="p-3.5">Time</th>
                   <th className="p-3.5">File Name & Size</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5">Matched Software</th>
-                  <th className="p-3.5">SHA-256 Checksum</th>
+                  <th className="p-3.5">Result</th>
+                  <th className="p-3.5">Matched App</th>
+                  <th className="p-3.5">SHA-256 Hash</th>
                   <th className="p-3.5 text-right">Actions</th>
                 </tr>
               </thead>

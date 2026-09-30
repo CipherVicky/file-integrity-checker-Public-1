@@ -9,14 +9,14 @@ import {
   Database, 
   History, 
   Lock, 
-  Zap, 
+  Sparkles, 
   Cpu, 
   ArrowRight, 
   Copy, 
   Check, 
   AlertTriangle,
   UploadCloud,
-  TerminalSquare
+  GraduationCap
 } from 'lucide-react';
 import { ActiveTab } from './Navbar';
 import { formatBytes, formatTimestamp, hashFileProgressive } from '../utils/crypto';
@@ -80,7 +80,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       setQuickResult(scanResult);
       onQuickScanResult(scanResult);
 
-      // Save to local audit history
+      // Save to local check history
       const saved = saveHistoryEntry({
         fileName: scanResult.fileName,
         fileSize: scanResult.fileSize,
@@ -91,7 +91,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
         vendor: matched?.vendor || potentialMismatch?.vendor
       });
 
-      // Attempt async cloud logging if configured
       logScanToSupabase(saved);
     } catch (err) {
       console.error('Hashing error:', err);
@@ -108,34 +107,32 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* Hero Security Overview */}
+      {/* Friendly Hero Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-cyan-500/30 p-6 sm:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-12 w-64 h-64 rounded-full bg-blue-500/10 blur-2xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-400/40 text-cyan-300 text-xs font-mono mb-4">
             <Lock className="w-3.5 h-3.5 text-cyan-400" />
-            <span>100% Client-Side Cryptographic Execution • Zero File Uploads</span>
+            <span>100% Private & Local • Files Never Leave Your Device</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-mono">
-            Cryptographic Integrity <br />
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+            Check If Your Files & Downloads <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400">
-              & Software Supply-Chain Verification
+              Are Safe, Real & Untouched
             </span>
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Verify downloaded installers, system ISOs, firmware, and mission-critical binaries against genuine
-            authoritative vendor signatures. Compute collision-resistant 256-bit cryptographic fingerprints entirely in your browser.
+            Every file has a unique <strong>SHA-256 fingerprint</strong>. If someone changes even one letter in a file, or if a download gets corrupted, the fingerprint changes completely. Drop any file here to check it in seconds.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={() => setActiveTab('hasher')}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs sm:text-sm font-mono shadow-lg shadow-cyan-500/25 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs sm:text-sm font-mono shadow-lg shadow-cyan-500/25 transition-all"
             >
               <FileSearch className="w-4 h-4" />
-              <span>Full File Hasher</span>
+              <span>Check Any File</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
             <button
@@ -143,72 +140,72 @@ export const Dashboard: React.FC<DashboardProps> = ({
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 font-semibold text-xs sm:text-sm font-mono transition-all"
             >
               <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-              <span>Software Verifier</span>
+              <span>Check Known App</span>
             </button>
             <button
               onClick={() => setActiveTab('baseline')}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-semibold text-xs sm:text-sm font-mono transition-all"
             >
               <FolderSync className="w-4 h-4 text-slate-400" />
-              <span>Directory Drift Monitor</span>
+              <span>Track Folder Changes</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* Beginner-friendly Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/30 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-slate-400">Cryptographic Digest</span>
+            <span className="text-xs font-mono uppercase text-slate-400">Fingerprint Type</span>
             <Cpu className="w-4 h-4 text-cyan-400" />
           </div>
           <p className="mt-2 text-xl font-bold font-mono text-cyan-300">SHA-256</p>
-          <span className="text-[11px] text-slate-400">256-bit / 32-byte digest</span>
+          <span className="text-[11px] text-slate-400">Unique 64-character code</span>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/30 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-slate-400">Trusted Records</span>
+            <span className="text-xs font-mono uppercase text-slate-400">Known Apps</span>
             <Database className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="mt-2 text-xl font-bold font-mono text-emerald-300">{trustedCount}</p>
-          <span className="text-[11px] text-slate-400">Official vendor hashes</span>
+          <span className="text-[11px] text-slate-400">Original software saved</span>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/30 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-slate-400">Scans Logged</span>
+            <span className="text-xs font-mono uppercase text-slate-400">Checks Done</span>
             <History className="w-4 h-4 text-blue-400" />
           </div>
           <p className="mt-2 text-xl font-bold font-mono text-blue-300">{historyCount}</p>
-          <span className="text-[11px] text-slate-400">Audit session records</span>
+          <span className="text-[11px] text-slate-400">Files checked so far</span>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/30 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-slate-400">Collision Boundary</span>
-            <Zap className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-mono uppercase text-slate-400">Tamper Proof</span>
+            <Sparkles className="w-4 h-4 text-amber-400" />
           </div>
-          <p className="mt-2 text-xl font-bold font-mono text-amber-300">2¹²⁸ Ops</p>
-          <span className="text-[11px] text-slate-400">Pre-image resistant</span>
+          <p className="mt-2 text-xl font-bold font-mono text-amber-300">100% Solid</p>
+          <span className="text-[11px] text-slate-400">Cannot be faked or guessed</span>
         </div>
       </div>
 
-      {/* Quick Verification Dropzone */}
+      {/* Quick Dropzone */}
       <div className="rounded-xl bg-slate-900/90 border border-cyan-500/20 p-6 shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-base font-bold text-white font-mono flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              QUICK VERIFY DROPZONE
+              <UploadCloud className="w-4 h-4 text-cyan-400" />
+              QUICK FILE CHECK
             </h2>
             <p className="text-xs text-slate-400">
-              Drop any file to compute SHA-256 and query the trusted software catalog instantly.
+              Drop any file here to calculate its SHA-256 code and check if it matches an original app.
             </p>
           </div>
           <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-            Streaming Engine
+            Fast & Private
           </span>
         </div>
 
@@ -246,7 +243,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 Drop a file here or <span className="text-cyan-400 underline decoration-cyan-400/40">Browse Files</span>
               </p>
               <p className="text-xs text-slate-500 mt-1">
-                Any format supported: ISO, EXE, DMG, ZIP, TAR.GZ, PDF, BIN. Handled progressively in 2MB memory blocks.
+                Works with any file type: documents, installers, images, zip files, or games.
               </p>
             </div>
           </div>
@@ -256,7 +253,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {isHashing && (
           <div className="mt-4 p-4 rounded-lg bg-slate-950 border border-cyan-500/30">
             <div className="flex justify-between text-xs font-mono mb-1.5">
-              <span className="text-cyan-400">Hashing: {currentFile?.name}</span>
+              <span className="text-cyan-400">Reading: {currentFile?.name}</span>
               <span className="text-slate-300">{progress}%</span>
             </div>
             <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -268,7 +265,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         )}
 
-        {/* Quick Scan Result Display */}
+        {/* Scan Result Display */}
         {quickResult && (
           <div className="mt-6 p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
             {/* Status Header Badge */}
@@ -277,24 +274,24 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 {quickResult.status === 'VERIFIED' && (
                   <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-mono text-xs font-bold">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                    VERIFIED – Exact Match with Official Vendor Hash
+                    VERIFIED – Hash matches the trusted original.
                   </div>
                 )}
                 {quickResult.status === 'HASH_MISMATCH' && (
                   <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-300 font-mono text-xs font-bold">
                     <AlertTriangle className="w-4 h-4 text-red-400" />
-                    HASH MISMATCH – File Differs From Trusted Original
+                    HASH MISMATCH – File differs from the trusted version.
                   </div>
                 )}
                 {quickResult.status === 'UNKNOWN' && (
                   <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 font-mono text-xs font-bold">
                     <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    UNKNOWN FILE – No Matching Trusted Hash Found
+                    UNVERIFIED – No matching trusted hash found.
                   </div>
                 )}
               </div>
               <span className="text-xs font-mono text-slate-400">
-                Computed in {quickResult.computedTimeMs}ms
+                Done in {quickResult.computedTimeMs}ms
               </span>
             </div>
 
@@ -309,21 +306,21 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="p-2.5 rounded bg-slate-900/60 border border-slate-800/80">
                 <span className="text-slate-500 block">File Size</span>
                 <span className="text-slate-200 font-semibold">
-                  {formatBytes(quickResult.fileSize)} ({quickResult.fileSize.toLocaleString()} bytes)
+                  {formatBytes(quickResult.fileSize)}
                 </span>
               </div>
               <div className="p-2.5 rounded bg-slate-900/60 border border-slate-800/80">
-                <span className="text-slate-500 block">Last Modified</span>
+                <span className="text-slate-500 block">Last Saved</span>
                 <span className="text-slate-200 font-semibold">
                   {formatTimestamp(quickResult.lastModified)}
                 </span>
               </div>
             </div>
 
-            {/* Full Monospace SHA-256 with Copy */}
+            {/* Monospace SHA-256 with Copy */}
             <div className="p-3 rounded-lg bg-slate-900 border border-cyan-500/20">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-mono uppercase text-slate-400">Computed SHA-256 Hash</span>
+                <span className="text-[11px] font-mono uppercase text-slate-400">File SHA-256 Hash</span>
                 <button
                   onClick={() => handleCopy(quickResult.sha256)}
                   className="flex items-center gap-1 px-2 py-0.5 text-xs font-mono rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition-colors"
@@ -340,12 +337,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {/* Matched Details */}
             {quickResult.matchedRecord && (
               <div className="p-3.5 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs">
-                <div className="font-bold text-emerald-400 mb-1">Vendor Identity Authenticated:</div>
+                <div className="font-bold text-emerald-400 mb-1">Original Software Found:</div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-slate-300">
-                  <div><span className="text-slate-500">Software:</span> {quickResult.matchedRecord.software}</div>
+                  <div><span className="text-slate-500">App:</span> {quickResult.matchedRecord.software}</div>
                   <div><span className="text-slate-500">Version:</span> {quickResult.matchedRecord.version}</div>
                   <div><span className="text-slate-500">Platform:</span> {quickResult.matchedRecord.platform}</div>
-                  <div><span className="text-slate-500">Source:</span> {quickResult.matchedRecord.source}</div>
+                  <div><span className="text-slate-500">Developer:</span> {quickResult.matchedRecord.vendor}</div>
                 </div>
               </div>
             )}
@@ -353,12 +350,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {/* Potential Mismatch Details */}
             {quickResult.potentialMismatchRecord && (
               <div className="p-3.5 rounded-lg bg-red-950/30 border border-red-500/30 text-xs text-red-200">
-                <div className="font-bold text-red-400 mb-1">Potential Tampering / Version Discrepancy:</div>
+                <div className="font-bold text-red-400 mb-1">File Does Not Match Original:</div>
                 <p>
-                  A registered package named <strong>"{quickResult.potentialMismatchRecord.file_name}"</strong> was found in the database, but its expected SHA-256 hash does not match this file.
-                </p>
-                <p className="mt-1 font-mono text-[11px] text-slate-400">
-                  Expected: {quickResult.potentialMismatchRecord.sha256}
+                  We found a known file named <strong>"{quickResult.potentialMismatchRecord.file_name}"</strong>, but its hash code is different. It may have been modified, corrupted, or it might be a different version.
                 </p>
               </div>
             )}
@@ -368,11 +362,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="p-3.5 rounded-lg bg-slate-900 border border-amber-500/30 text-xs text-slate-300">
                 <div className="flex items-center gap-1.5 font-bold text-amber-400 mb-1">
                   <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                  Security Notice: Unknown File ≠ Malicious File
+                  Note: Unknown Does NOT Mean Harmful
                 </div>
                 <p>
-                  No authoritative checksum was found in the built-in catalog for this specific file.
-                  This is common for private documents, customized builds, or unindexed releases. SHA-256 verifies identity and untampered transmission, not whether executable code is inherently benign.
+                  This file is not in our built-in list of popular apps. This is normal for private files, photos, documents, or personal programs.
                 </p>
               </div>
             )}
@@ -383,8 +376,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Feature Exploration Grid */}
       <div>
         <div className="mb-4">
-          <h2 className="text-lg font-bold text-white font-mono">CORE CAPABILITIES</h2>
-          <p className="text-xs text-slate-400">Access advanced integrity verification, drift detection, and cryptographic analysis tools.</p>
+          <h2 className="text-lg font-bold text-white font-mono">TOOLS & FEATURES</h2>
+          <p className="text-xs text-slate-400">Choose a tool below to check files, compare codes, or monitor folders.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -396,11 +389,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <FileSearch className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              General File Hasher
+              1. File Hash Checker
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Calculate SHA-256 for any local file of arbitrary size. Inspect file metadata and copy checksums with zero network footprint.
+              Calculate the unique 64-character SHA-256 code for any file. Copy the code or save a checksum file.
             </p>
           </div>
 
@@ -412,11 +405,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              Software Verifier
+              2. Check Known Software
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Compare installers against genuine vendor hashes for Ubuntu, Debian, Kali, Firefox, VS Code, Git, Wireshark, VLC, and more.
+              Check if an installer you downloaded matches the official copy from Ubuntu, Firefox, VS Code, Git, or VLC.
             </p>
           </div>
 
@@ -428,11 +421,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <GitCompare className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              Compare Checksums
+              3. Compare Two Hashes
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Safe, case-insensitive comparison with character-by-character hexadecimal diff highlighting to spot slight discrepancies.
+              Paste two hashes side-by-side to see if they match. We will highlight any letter differences in red.
             </p>
           </div>
 
@@ -444,11 +437,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <FolderSync className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              Baseline Drift Monitor
+              4. Track Folder Changes
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Take cryptographic snapshots of directories and detect tampered, modified, newly added, or deleted files. Export Markdown/JSON audits.
+              Save a list of your files today. Check later to immediately see which files were modified, added, or deleted.
             </p>
           </div>
 
@@ -460,11 +453,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <Activity className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              Avalanche Lab
+              5. The Hash Experiment Lab
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Witness the Strict Avalanche Criterion (SAC): change 1 single bit in an input string and observe ~50% of the 256 output bits flip randomly.
+              Change just 1 character in a sentence and watch half of the 256 bits instantly flip to something completely different.
             </p>
           </div>
 
@@ -473,14 +466,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
             className="group cursor-pointer p-5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 transition-all shadow-md"
           >
             <div className="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 mb-3 group-hover:scale-105 transition-transform">
-              <TerminalSquare className="w-5 h-5" />
+              <GraduationCap className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-white font-mono flex items-center justify-between">
-              Security Hub & CLI
+              6. Learn the Basics
               <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-teal-400 transition-colors" />
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Learn cryptanalysis concepts, understand threat models (tampering vs malware), and use the bundled Node.js companion CLI tool.
+              Easy explanations of what hashes are, why they are used, and simple tips to stay safe online.
             </p>
           </div>
         </div>

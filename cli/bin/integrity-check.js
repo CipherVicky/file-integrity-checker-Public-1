@@ -259,17 +259,17 @@ async function handleBaseline(args) {
 function printHelp() {
   console.log(`
 File Integrity Checker – SHA-256 CLI v${VERSION}
-NIST FIPS 180-4 Cryptographic Integrity Verification Tool
+Check if files are original, safe, and unmodified
 
 Usage:
   integrity-check <command> [options]
 
 Commands:
-  verify <file>                        Verify file against the authoritative trusted database
-  hash <file>                          Compute SHA-256 digest and file metadata
-  compare <hash1> <hash2>              Compare two SHA-256 hashes safely and case-insensitively
-  baseline create <dir> [--out <file>] Snapshot directory into a baseline JSON manifest
-  baseline audit <dir> --baseline <f>  Audit directory drift against an existing baseline manifest
+  verify <file>                        Check if a file matches known original software
+  hash <file>                          Get the 64-character SHA-256 hash of any file
+  compare <hash1> <hash2>              Compare two hashes to see if they match
+  baseline create <dir> [--out <file>] Save a snapshot of all files in a folder
+  baseline audit <dir> --baseline <f>  Check what files were changed, added, or deleted
   help, --help                         Show this help message
 `);
 }
